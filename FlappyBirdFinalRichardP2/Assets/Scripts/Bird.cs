@@ -1,29 +1,26 @@
 using System.Collections;
 using UnityEngine;
 
-public class Bird : MonoBehaviour {
+public class Bird : MonoBehaviour { 
 
-    public float upForce = 200f;            //Upward force of the "flap".
-    
-    private bool isDead = false;            //Has the player collided with a wall?
-    private Animator anim;                    //Reference to the Animator component.
-    private Rigidbody2D rb2d;                //Holds a reference to the Rigidbody2D component of the bird.
+    public float upForce = 200f;
 
+    private bool isDead = false;
+    private Rigidbody2D rb2d;
+    private Animator anim;
 
-    // Start is called before the first frame update
+    // Use this for initialization
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    //Update is called once per frame
+    void Update ()
     {
-        //Don't allow control if the bird has died.
         if (isDead == false)
         {
-            //...tell the animator about it and then...
             if (Input.GetMouseButtonDown (0))
             {
                 rb2d.velocity = Vector2.zero;
@@ -31,12 +28,13 @@ public class Bird : MonoBehaviour {
                 anim.SetTrigger("Flap");
             }
         }
-        
     }
 
-    void OnCollisionEnter2D(Collision2D other)
+    void OnCollisionEnter2D ()
     {
+        rb2d.velocity = Vector2.zero;
         isDead = true;
         anim.SetTrigger("Die");
+        GameController.instance.BirdDied();
     }
 }
